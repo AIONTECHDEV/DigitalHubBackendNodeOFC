@@ -1,0 +1,254 @@
+{
+    "openapi": "3.0.0.",
+    "info": {
+        "version": "1.0.0.",
+        "title": "DigitalHub - Backend CP",
+        "description": "REST API to provide the functionality of transferring money and showing the past transactions in a historical transaction list",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [{
+        "url": "/digitalhub/v1"
+    }],
+    "tags": [
+        {
+            "name": "Transfer money",
+            "description": "As a user should be able to transfer money."
+        },
+        {
+            "name": "Transactions history",
+            "description": "As a user should be able to get all, received and sent transactions."
+        },
+        {
+            "name": "Accounts",
+            "description": "As a user should be able get information about an account."
+        }
+    ],
+    "produces": ["application/json"],
+    "paths": {
+        "/transfer/money": {
+            "post": {
+                "description": "As a user should be able to transfer money using the Transfer POST method with the payload as follows",
+                "summary": "Transfer amount",
+                "tags": ["Transfer money"],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/TransferAmountBody"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success transaction"
+                    }
+                }
+            }
+        },
+        "/transactions/{account}": {
+            "get": {
+                "description": "As a user I should be able to get all transactions for a given account",
+                "summary": "All transactions history",
+                "tags": ["Transactions history"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "account",
+                    "schema": {
+                        "type": "number"
+                    },
+                    "required": true,
+                    "description": "Number account to get transaction history"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success transaction",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfTransactionHistory"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/received/{account}": {
+            "get": {
+                "description": "As a user I should be able to get all received transactions from a given account",
+                "summary": "Received transactions history",
+                "tags": ["Transactions history"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "account",
+                    "schema": {
+                        "type": "number"
+                    },
+                    "required": true,
+                    "description": "Number account to get received transaction"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success transaction",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfTransactionHistory"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/sent/{account}": {
+            "get": {
+                "description": "As a user I should be able to get all sent transactions from a given account",
+                "summary": "Sent transactions history",
+                "tags": ["Transactions history"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "account",
+                    "schema": {
+                        "type": "number"
+                    },
+                    "required": true,
+                    "description": "Number account to get sent transaction history"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success transaction",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ArrayOfTransactionHistory"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/balance/{account}": {
+            "get": {
+                "description": "As a user I should be able to get the current balance for a given account",
+                "summary": "Account balance",
+                "tags": ["Accounts"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "account",
+                    "schema": {
+                        "type": "number"
+                    },
+                    "required": true,
+                    "description": "Number account to get balance"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success transaction",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountBalance"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "requestBodies": {
+            "TransferAmountBody": {
+                "description": "A JSON object containing transfer amount information",
+                "required": "true",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TransferAmount"
+                        },
+                        "example": {
+                            "fromAccount": 987654321,
+                            "toAccount": 123456789,
+                            "amount": 99.54
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "TransferAmount": {
+                "type": "object",
+                "properties": {
+                    "fromAccount": {
+                        "type": "number",
+                        "required": "true"
+                    },
+                    "toAccount": {
+                        "type": "number",
+                        "required": "true"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "required": "true"
+                    }
+                }
+            },
+            "ArrayOfTransactionHistory": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "fromAccount": {
+                            "type": "number"
+                        },
+                        "toAccount": {
+                            "type": "number"
+                        },
+                        "amount": {
+                            "type": "number"
+                        },
+                        "sentAt": {
+                            "type": "string"
+                        }
+                    },
+                    "example": {
+                        "fromAccount": 123456789,
+                        "toAccount": 987654321,
+                        "amount": 234.88,
+                        "sentAt": "2012-04-23T18:25:43.511Z"
+                    }   
+                }
+            },
+            "AccountBalance": {
+                "type": "object",
+                "properties": {
+                    "balance": {
+                        "type": "object",
+                        "properties": {
+                            "account": {
+                                "type": "number"
+                            },
+                            "balance": {
+                                "type": "number"
+                            },
+                            "owner": {
+                                "type": "number"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "balance": {
+                        "account":123456789,
+                        "balance": 45450.00,
+                        "owner": 7612333392,
+                        "createdAt": "2012-04-23T18:25:43.511Z"
+                    }
+                }
+            }
+        }
+    }
+}

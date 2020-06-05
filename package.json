@@ -1,0 +1,27 @@
+{
+  "name": "digitalhub_nodejs",
+  "version": "1.0.0",
+  "description": "DigitalHub - Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "rimraf ./dist && tsc -p ."
+  },
+  "author": "Oscar Flores Conde",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/node": "^14.0.9",
+    "@types/swagger-ui-express": "^4.1.2",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.3"
+  }
+}
